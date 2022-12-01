@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const NBPROGRAM = 8;
     const PROGRAM = [
         ['Walking dead', 'Des zombies envahissent la terre', 'category_Drame'],
         ['Stargate SG-1', 'Le docteur Daniel Jackson est rejeté par la communauté des égyptologues en raison de ses théories controversées sur la fonction des pyramides d\'Égypte qui seraient des lieux d\'atterrissage de vaisseaux spatiaux. Cependant, à la sortie d\'une conférence, il est recruté par Catherine Langford pour travailler sur un projet secret de l\'armée américaine. Arrivé dans la base de Creek Mountain, il découvre une dalle mise au jour en 1928 à Gizeh (Égypte) puis en traduit les écritures du cercle intérieur.', 'category_Science-fiction'],
@@ -22,6 +23,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        $i = 0;
         foreach(self::PROGRAM as $programContent)
         {
             $program = new Program();
@@ -29,6 +31,8 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setSynopsis($programContent[1]);
             $program->setCategory($this->getReference($programContent[2]));
             $manager->persist($program);
+            $this->addReference('program_' . $i, $program);
+            $i+=1;
         }
         $manager->flush();
     }
