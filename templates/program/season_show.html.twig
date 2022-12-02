@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<pre>
+    {{ dump(season.episodes.0) }}
+</pre>
+    <h1 class="mt-0">{{ program.title }}</h1>
+    <p>{{ program.synopsis }}</p>
+    <p>Catégorie : {{ program.category.name }}</p>
+
+    <h2>Saison {{season.number}} - {{  season.year }}</h2>
+    <p>{{season.description}}</p>
+
+    {% for episode in season.episodes %}
+    <li>
+        Episode {{episode.number}} - {{episode.title}}
+    </li>
+    {% endfor %}
+{% endblock %}
