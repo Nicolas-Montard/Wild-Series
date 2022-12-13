@@ -11,7 +11,7 @@
             <p>Catégorie : {{ program.category.name }}</p>
             <ul>
                 {% for season in program.seasons %}
-                <li><a href="{{ path("program_season_show", {"program": program.id, "season": season.id }) }}" class="text-dark"> Saison {{ season.number }} - {{  season.year }}</a></li>
+                <li><a href="{{ path("program_season_show", {"slug": program.slug, "season": season.id }) }}" class="text-dark"> Saison {{ season.number }} - {{  season.year }}</a></li>
                 {%  endfor %}
             </ul>
         </div>

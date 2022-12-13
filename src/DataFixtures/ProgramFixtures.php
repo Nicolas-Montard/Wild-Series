@@ -6,6 +6,7 @@ use App\Entity\Program;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -21,6 +22,13 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
         ['The Witcher', 'Inspiré d\'une série littéraire fantastique à succès, The Witcher est un récit épique sur la famille et le destin. Geralt de Riv, un chasseur de monstres solitaire, se bat pour trouver sa place dans un monde où les humains sont souvent plus vicieux que les bêtes.', 'category_Fantastique']
     ];
 
+    private SluggerInterface $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
+
     public function load(ObjectManager $manager)
     {
         $i = 0;
@@ -30,6 +38,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setTitle($programContent[0]);
             $program->setSynopsis($programContent[1]);
             $program->setCategory($this->getReference($programContent[2]));
+            $program->setSlug($this->slugger->slug($program->getTitle()));
             $manager->persist($program);
             $this->addReference('program_' . $i, $program);
             $i+=1;
