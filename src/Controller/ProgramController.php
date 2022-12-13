@@ -12,6 +12,8 @@ use App\Service\ProgramDuration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -41,7 +43,7 @@ class ProgramController extends AbstractController
          ]);
     }
     #[Route('/new', name: 'new')]
-    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger): Response
+    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger, MailerInterface $mailer): Response
     {
         $program = new Program;
 
@@ -53,6 +55,14 @@ class ProgramController extends AbstractController
             $slug = $slugger->slug($program->getTitle());
             $program->setSlug($slug);
             $programRepository->save($program, true);
+
+            $email = (new Email())
+                ->from($this->getParameter('mailer_from'))
+                ->to('your_email@example.com')
+                ->subject('Une nouvelle série vient d\'être publiée !')
+                ->html($this->renderView('Program/newProgramEmail.html.twig', ['program' => $program]));
+
+            $mailer->send($email);
 
             $this->addFlash('success', 'The new program has been created');
 
