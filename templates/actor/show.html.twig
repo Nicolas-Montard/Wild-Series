@@ -3,6 +3,7 @@
 {% block title %}Actor{% endblock %}
 
 {% block body %}
+    <img src="{{ vich_uploader_asset(actor) }}" alt="{{actor.name}}">
     <h1>{{actor.name}}</h1>
 <ul>
     {% for program in actor.programs %}
