@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class ProgramType extends AbstractType
 {
@@ -18,7 +19,6 @@ class ProgramType extends AbstractType
         $builder
             ->add('title')
             ->add('synopsis', TextareaType::class)
-            ->add('poster', FileType::class)
             ->add('category', null, ['choice_label' => 'name'])
             ->add('actors', EntityType::class, [
                 'class' => Actor::class,
@@ -26,6 +26,11 @@ class ProgramType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'by_reference' => false,
+            ])
+            ->add('posterFile', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'download_uri' => true,
             ])
         ;
     }
