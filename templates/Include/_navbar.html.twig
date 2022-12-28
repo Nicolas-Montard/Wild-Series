@@ -1,5 +1,13 @@
 <nav class="navbar navbar-expand-md bg-secondary">
     <div class="container-fluid">
       <a class="fs-4 text-dark" href="/">Wild Séries</a>
+      {% if app.user %}
+      <div>
+        {{ app.user.email }}
+        <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+      </div>  
+      {% else %}
+        <a href="{{ path('app_login') }}"> Se connecter</a>
+      {% endif %}
     </div>
   </nav>
