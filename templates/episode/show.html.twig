@@ -30,6 +30,9 @@
     <div class="mt-2">
         <p class="mb-1">{{comment.comment}}</p>
         <p>Note: {{comment.rate}}</p>
+        {% if is_granted("ROLE_ADMIN") or app.user == comment.author %}
+            <a href="{{ path('app_comment_delete', {'id': comment.id}) }}">delete</a>
+        {% endif %}
     </div>
     {% endfor %}
     {% endif %}
