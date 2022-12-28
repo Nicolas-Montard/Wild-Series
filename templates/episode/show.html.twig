@@ -25,6 +25,20 @@
             </tr>
         </tbody>
     </table>
+    {% if comments %}
+    {% for comment in comments %}
+    <div class="mt-2">
+        <p class="mb-1">{{comment.comment}}</p>
+        <p>Note: {{comment.rate}}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% if app.user %}
+        {{form_start(form)}}
+        {{form_widget(form)}}
+            <button type="submit">Add comment</button>
+        {{form_end(form)}}
+    {% endif %}
 
     <a href="{{ path('app_episode_index') }}" class="text-dark">back to list</a>
 
