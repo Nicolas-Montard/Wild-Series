@@ -26,5 +26,9 @@
         </ul>
     </div>
 
+    {% if is_granted("ROLE_ADMIN") %}
+    <a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+    {% endif %}
+
     <a href="{{ path('program_index') }}" class="text-dark"> Retour à la liste des programmes </a>
 {% endblock %}

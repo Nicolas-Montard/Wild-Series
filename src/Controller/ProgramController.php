@@ -9,6 +9,7 @@ use App\Form\ProgramType;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
 use App\Service\ProgramDuration;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,7 @@ class ProgramController extends AbstractController
          ]);
     }
     #[Route('/new', name: 'new')]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger, MailerInterface $mailer): Response
     {
         $program = new Program;
@@ -100,6 +102,9 @@ class ProgramController extends AbstractController
     #[Route('/{slug}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Program $program, ProgramRepository $programRepository, SluggerInterface $slugger): Response
     {
+        if ($this->getUser() !== $program->getOwner()) {
+            throw $this->createAccessDeniedException('Only the owner can access this page');
+        }
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
